@@ -1,73 +1,83 @@
 .container {
-    width: 1000px;
-    margin: 0 auto;
-    padding: 0 15px;
-
+  width: 1000px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
 .slider {
-    position: relative;
-
+  position: relative;
 }
 
 img {
-    display: block;
-    max-width: 100%;
-    height: auto;
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .dots-list {
-    display: flex;
-    list-style: none;
-    justify-content: center;
-    padding-left: 0;
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  padding-left: 0;
 }
 
 .dots {
-    cursor: pointer;
+  cursor: pointer;
 
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    background-color: #ccc;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background-color: #ccc;
 }
 
 .dots + .dots {
-    margin-left: 15px;
+  margin-left: 15px;
 }
 
 .dots.active {
-    background-color: rgb(172, 255, 127);
+  background-color: rgb(172, 255, 127);
 }
 
 .indicator {
-    position: absolute;
-    left: 30px;
-    top: 15px;
-    color: #fff;
+  position: absolute;
+  left: 30px;
+  top: 15px;
+  color: #fff;
 }
 
 .button-list {
-    list-style: none;
+  list-style: none;
+}
+.visually-hidden {
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  margin: -1px;
 }
 
 .move {
-    border: none;
-    background: transparent;
+  border: none;
+  background: transparent;
 
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    /* left: 10px; */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  /* left: 10px; */
 
-    color: #fff;
-    font-size: 30px;
+  color: #fff;
+  font-size: 30px;
 }
 
 .move.right {
-    right: 10px;
+  right: 10px;
 }
 
 .move.left {
-    left: 10px;
+  left: 10px;
 }
