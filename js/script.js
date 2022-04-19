@@ -21,6 +21,9 @@ class Slider {
     this.parent = document.querySelector(selector);
     this.rightButton = this.parent.querySelector(".move.right");
     this.leftButton = this.parent.querySelector(".move.left");
+    this.dotsList = this.parent.querySelector(".dots-list");
+    this.indexRef = this.parent.querySelector(".index");
+    this.totalRef = this.parent.querySelector(".total");
     this.array = array;
     this.loop = loop;
     this.navs = navs;
@@ -34,7 +37,9 @@ class Slider {
       this.onClick();
     }
     if (this.pags) {
+      this.pagsMarkupCreate();
       this.makePags();
+      this.onClickPagsNav();
     }
 
     this.slidesApply();
@@ -46,12 +51,14 @@ class Slider {
       .classList.remove("visually-hidden");
   }
   makePags() {
-    this.parent.querySelector(".dots-list").classList.remove("visually-hidden");
+    this.dotsList.classList.remove("visually-hidden");
   }
 
   doIndicator() {
-    this.parent.querySelector(".index").textContent = this.indexSlider + 1;
-    this.parent.querySelector(".total").textContent = this.array.length;
+    this.indexRef.textContent = this.indexSlider + 1;
+    if (!this.totalRef.textContent) {
+      this.totalRef.textContent = this.array.length;
+    }
   }
 
   slidesApply() {
@@ -73,7 +80,6 @@ class Slider {
           this.indexSlider += 1;
         }
       }
-      console.log(this.indexSlider);
     } else {
       if (this.loop) {
         if (this.indexSlider > 0) {
@@ -90,10 +96,44 @@ class Slider {
       }
     }
     this.slidesApply();
+    this.activeClassChange();
+    this.doIndicator();
   };
   onClick() {
     this.rightButton.addEventListener("click", this.changeImg);
     this.leftButton.addEventListener("click", this.changeImg);
+  }
+  pagsMarkupCreate() {
+    const liMarkup = this.array
+      .map(
+        (element, index) => `
+          <li class="dots ${
+            index === 0 ? "active" : ""
+          }" data-index="${index}"></li>
+        `
+      )
+      .join("");
+    this.dotsList.insertAdjacentHTML("beforeend", liMarkup);
+  }
+  onClickPagsNav() {
+    this.dotsList.addEventListener("click", this.onClickChangeImg);
+  }
+  onClickChangeImg = (event) => {
+    if (!event.target.classList.contains("dots")) return;
+    // console.log(event.target.dataset.index);
+    this.indexSlider = Number(event.target.dataset.index);
+    this.slidesApply();
+    this.activeClassChange();
+    this.doIndicator();
+  };
+
+  activeClassChange() {
+    const dots = this.dotsList.children;
+
+    [...dots].forEach((element) => {
+      element.classList.remove("active");
+    });
+    dots[this.indexSlider].classList.add("active");
   }
 }
 const slider = new Slider(
@@ -109,4 +149,3 @@ const slider = new Slider(
 );
 
 slider.init();
-console.log(slides);
