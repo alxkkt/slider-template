@@ -19,6 +19,8 @@ class Slider {
     { loop = false, navs = false, pags = false, auto = false, delay = 5 }
   ) {
     this.parent = document.querySelector(selector);
+    this.rightButton = this.parent.querySelector(".move.right");
+    this.leftButton = this.parent.querySelector(".move.left");
     this.array = array;
     this.loop = loop;
     this.navs = navs;
@@ -29,6 +31,7 @@ class Slider {
   init() {
     if (this.navs) {
       this.makeNavsArrow();
+      this.onClick();
     }
     if (this.pags) {
       this.makePags();
@@ -51,10 +54,46 @@ class Slider {
     this.parent.querySelector(".total").textContent = this.array.length;
   }
 
-  slidesApply(indexSlider) {
+  slidesApply() {
     const img = this.parent.querySelector(".slider-img");
     img.setAttribute("src", this.array[this.indexSlider].img);
     img.setAttribute("alt", this.array[this.indexSlider].text);
+  }
+
+  changeImg = (event) => {
+    if (event.target.classList.contains("right")) {
+      if (this.loop) {
+        if (this.indexSlider < this.array.length - 1) {
+          this.indexSlider += 1;
+        } else {
+          this.indexSlider = 0;
+        }
+      } else {
+        if (this.indexSlider < this.array.length - 1) {
+          this.indexSlider += 1;
+        }
+      }
+      console.log(this.indexSlider);
+    } else {
+      if (this.loop) {
+        if (this.indexSlider > 0) {
+          this.indexSlider -= 1;
+        } else {
+          this.indexSlider = this.array.length - 1;
+        }
+      } else {
+        if (this.indexSlider > 0) {
+          this.indexSlider -= 1;
+        } else {
+          this.indexSlider = 0;
+        }
+      }
+    }
+    this.slidesApply();
+  };
+  onClick() {
+    this.rightButton.addEventListener("click", this.changeImg);
+    this.leftButton.addEventListener("click", this.changeImg);
   }
 }
 const slider = new Slider(
