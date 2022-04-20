@@ -1,4 +1,4 @@
-import { slides } from "./data.js";
+import slides from "./data.json" assert { type: "json" };
 // Функционал:
 // кнопки далее и назад
 // подпись текста к каждому слайду
@@ -19,17 +19,30 @@ class Slider {
     { loop = false, navs = false, pags = false, auto = false, delay = 5 }
   ) {
     this.parent = document.querySelector(selector);
+    this.imgRef = this.parent.querySelector(".slider-img");
     this.rightButton = this.parent.querySelector(".move.right");
     this.leftButton = this.parent.querySelector(".move.left");
     this.dotsList = this.parent.querySelector(".dots-list");
     this.indexRef = this.parent.querySelector(".index");
     this.totalRef = this.parent.querySelector(".total");
     this.array = array;
+    this.length = this.array.length;
     this.loop = loop;
     this.navs = navs;
     this.pags = pags;
     this.auto = auto;
-    this.indexSlider = 0;
+    this._indexSlider = 0;
+  }
+
+  get indexSlider() {
+    return this._indexSlider;
+  }
+  set indexSlider(newIndex) {
+    this._indexSlider = newIndex;
+
+    this.slidesApply();
+    this.activeClassChange();
+    this.doIndicator();
   }
   init() {
     if (this.navs) {
@@ -42,8 +55,7 @@ class Slider {
       this.onClickPagsNav();
     }
 
-    this.slidesApply();
-    this.doIndicator();
+    this.indexSlider = 0;
   }
   makeNavsArrow() {
     this.parent
@@ -62,21 +74,22 @@ class Slider {
   }
 
   slidesApply() {
-    const img = this.parent.querySelector(".slider-img");
-    img.setAttribute("src", this.array[this.indexSlider].img);
-    img.setAttribute("alt", this.array[this.indexSlider].text);
+    const { text, img } = this.array[this.indexSlider];
+
+    this.imgRef.src = img;
+    this.imgRef.alt = text;
   }
 
   changeImg = (event) => {
     if (event.target.classList.contains("right")) {
       if (this.loop) {
-        if (this.indexSlider < this.array.length - 1) {
+        if (this.indexSlider < this.length - 1) {
           this.indexSlider += 1;
         } else {
           this.indexSlider = 0;
         }
       } else {
-        if (this.indexSlider < this.array.length - 1) {
+        if (this.indexSlider < this.length - 1) {
           this.indexSlider += 1;
         }
       }
@@ -85,7 +98,7 @@ class Slider {
         if (this.indexSlider > 0) {
           this.indexSlider -= 1;
         } else {
-          this.indexSlider = this.array.length - 1;
+          this.indexSlider = this.length - 1;
         }
       } else {
         if (this.indexSlider > 0) {
@@ -95,9 +108,6 @@ class Slider {
         }
       }
     }
-    this.slidesApply();
-    this.activeClassChange();
-    this.doIndicator();
   };
   onClick() {
     this.rightButton.addEventListener("click", this.changeImg);
@@ -120,11 +130,7 @@ class Slider {
   }
   onClickChangeImg = (event) => {
     if (!event.target.classList.contains("dots")) return;
-    // console.log(event.target.dataset.index);
     this.indexSlider = Number(event.target.dataset.index);
-    this.slidesApply();
-    this.activeClassChange();
-    this.doIndicator();
   };
 
   activeClassChange() {
